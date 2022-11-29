@@ -76,7 +76,7 @@ hadoop fs -mv /output_dir/part-r-00000 /Results/MonthHiLo.txt
 
 ```
 hadoop jar C:\Users\Anvay\Desktop\DBMS\OutputSort.jar OutputSort /Results/MonthHiLo.txt /output_dir
-hadoop fs -mv /output_dir/part-r-0000 /Results/OutputSort.txt 
+hadoop fs -mv /output_dir/part-r-00000 /Results/OutputSort.txt 
 
 ```
 
