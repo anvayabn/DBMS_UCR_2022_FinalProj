@@ -67,7 +67,7 @@ hadoop fs -mv /output_dir/part-r-00000 /Results/MeanTempOutput.txt
 
 ```
 hadoop fs -rm -r /output_dir/
-hadoop jar C:\Users\Anvay\Desktop\DBMS\MonthHiLo.jar MonthHiLo /Results/MeanTemppMonthpState/MeanTempOutput.txt /output_dir
+hadoop jar C:\Users\Anvay\Desktop\DBMS\MonthHiLo.jar MonthHiLo /Results/MeanTempOutput.txt /output_dir
 hadoop fs -mv /output_dir/part-r-00000 /Results/MonthHiLo.txt
 
 ```
