@@ -41,5 +41,5 @@ call hadoop fs -mv /output_dir/part-r-00000 /Results/OutputSort.txt
 timeout /t 10  
 call hadoop fs -ls /Results 
 timeout /t 10 
-echo "Script Has been successfully executes, Mapreduce is Successfull, Check the Files in the Result Directory "
+echo "Script has been successfully executed, MapReduce is Successfull, Check the Files in the Result Directory "
 exit 0
