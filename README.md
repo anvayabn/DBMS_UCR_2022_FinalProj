@@ -28,7 +28,18 @@ d.	The difference between the two (from 2.b and 2.c), e.g., “40”
 a.	Each row of your output should contain: The state abbreviation, the average temperature and name of the highest month, the average temperature and name of the lowest month and the difference between the two.
 
 ### Steps
-- Steps 1 : Create the following directories on the Hadoop file systems.
+- Step 0 : Use the script ```mapReduceScriptRev.cmd``` to execute all he map reduce jobs at once.
+
+  - **Please Note** that, this script is designed for windows cmd or powershell. If the the script does not run you can follow the steps below one after the other.Also    change the DATADIR variable in the script as per the path in which the datasets and the jar files are stored. If the mapreduce jobs are slow please increase/decrease the timeout in the script as per requirement. 
+  
+  To execute the script, do the following with admin rights on the cmd/powershell:
+```
+.\mapReduceScriptRev.cmd
+
+```
+   
+  
+- Step 1 : Create the following directories on the Hadoop file systems.
 
 ```
 hadoop fs -mkdir /input_dir
@@ -37,7 +48,7 @@ hadoop fs -mkdir /Results
 
 ```
 
-- Step2 : Copy the CSV file and the datasets to the input directory 
+- Step 2 : Copy the CSV file and the datasets to the input directory 
 
 ```
 hadoop fs -put C:\Users\Anvay\Desktop\DBMS\WeatherStationLocations.csv /input_dir 
