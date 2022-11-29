@@ -31,6 +31,8 @@ a.	Each row of your output should contain: The state abbreviation, the average t
 - Step 0 : Use the script ```mapReduceScriptRev.cmd``` to execute all he map reduce jobs at once.
 
   - **Please Note** that, this script is designed for windows cmd or powershell. If the the script does not run you can follow the steps below one after the other.Also    change the DATADIR variable in the script as per the path in which the datasets and the jar files are stored. If the mapreduce jobs are slow please increase/decrease the timeout in the script as per requirement. 
+  - **This will delete existing input, ouput directories, Be Carefull**
+  - After Successfull Execution the following will be displayed **" Script Has been successfully executes, Mapreduce is Successfull, Check the Files in the Result Directory "**
   
   To execute the script, do the following with admin rights on the cmd/powershell:
 ```
