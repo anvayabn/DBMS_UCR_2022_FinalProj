@@ -4,46 +4,19 @@ import org.apache.hadoop.conf.*;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapreduce.*;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.text.DecimalFormat;
 
 public class MonthHiLo{
     public static class MinMaxTemperature implements Writable {
-        private String minTemDate;
-        private String maxTemDate;
-        private float difference;
+        public String minTemDate;
+        public String maxTemDate;
+        public float difference;
 
 
         DecimalFormat df = new DecimalFormat("0.00");
-
-
-
-        public String getMinTemDate() {
-            return minTemDate;
-        }
-
-        public void setMinTemDate(String mintempWithDate){
-            this.minTemDate=mintempWithDate;
-        }
-
-        public String getMaxTemDate(){
-            return maxTemDate;
-        }
-
-        public void setMaxTemDate(String maxtempWithDate){
-            this.maxTemDate=maxtempWithDate;
-        }
-
-        public float getDifference() {
-            return difference;
-        }
-        public void setDifference(float difference) {
-            this.difference = Float.parseFloat(df.format(difference));
-        }
 
         public void readFields(DataInput in) throws IOException {
             minTemDate=new String(in.readUTF());
@@ -63,14 +36,14 @@ public class MonthHiLo{
     }
 
     public static class Map1 extends Mapper<Object, Text, Text, MinMaxTemperature> {
-        private Text statekey = new Text();
-        private String minTemDate;
-        private String maxTemDate;
-        private MinMaxTemperature outvalue = new MinMaxTemperature();
+
 
         public void map(Object key, Text value, Context context)
                 throws IOException, InterruptedException
         {
+            Text statekey = new Text();
+            MinMaxTemperature outvalue = new MinMaxTemperature();
+
             String line = value.toString();
             line = line.replaceAll("\\s+", ",");
             String[] part = line.split(",");
@@ -79,21 +52,21 @@ public class MonthHiLo{
             String date = part[0].substring(7);
             String temperature = part[1];
 
-            statekey.set(state);
-            minTemDate = date + "," + temperature;
-            maxTemDate = date + "," + temperature;
-            outvalue.setMinTemDate(minTemDate);
-            outvalue.setMaxTemDate(maxTemDate);
-            outvalue.setDifference(0);
+            statekey = new Text(state);
+            String minTemDate = date + "," + temperature;
+            String maxTemDate = date + "," + temperature;
+            outvalue.minTemDate = minTemDate;
+            outvalue.maxTemDate = maxTemDate;
+            outvalue.difference = 0;
             context.write(statekey, outvalue);
         }
     }
 
     public static class Red1 extends Reducer<Text, MinMaxTemperature, Text, MinMaxTemperature> {
-        private MinMaxTemperature result = new MinMaxTemperature();
         public void reduce(Text key, Iterable<MinMaxTemperature> values, Context context)
                 throws IOException, InterruptedException
         {
+            MinMaxTemperature result = new MinMaxTemperature();
             float minTemperature = 0;
             float maxTemperature = 0;
             float resultminTemperature = 0;
@@ -103,13 +76,13 @@ public class MonthHiLo{
             float finalresultminTemperature = 0;
             float finalresultmaxTemperature = 0;
 
-            result.setMinTemDate("");
-            result.setMaxTemDate("");
-            result.setDifference(0);
+            result.minTemDate = "";
+            result.maxTemDate = "";
+            result.difference = 0;
 
             for (MinMaxTemperature t : values) {
-                if(t.getMinTemDate().length() > 0){
-                    String[] date_with_min_temp = t.getMinTemDate().split(",");
+                if(t.minTemDate.length() > 0){
+                    String[] date_with_min_temp = t.minTemDate.split(",");
                     if(date_with_min_temp.length > 0)
                     {
                         minTemperature = Float.parseFloat(date_with_min_temp[1]);
@@ -121,9 +94,9 @@ public class MonthHiLo{
                     }
                 }
 
-                if (t.getMaxTemDate().length() > 0)
+                if (t.maxTemDate.length() > 0)
                 {
-                    String[] date_with_max_temp = t.getMaxTemDate().split(",");
+                    String[] date_with_max_temp = t.maxTemDate.split(",");
                     if(date_with_max_temp.length > 0)
                     {
                         maxTemperature = Float.parseFloat(date_with_max_temp[1]);
@@ -135,8 +108,8 @@ public class MonthHiLo{
                     }
                 }
 
-                if(result.getMinTemDate().length() > 0){
-                    String[] result_date_with_min_temp = result.getMinTemDate().split(",");
+                if(result.minTemDate.length() > 0){
+                    String[] result_date_with_min_temp = result.minTemDate.split(",");
                     if(result_date_with_min_temp.length > 0)
                     {
                         resultminTemperature = Float.parseFloat(result_date_with_min_temp[1]);
@@ -147,8 +120,8 @@ public class MonthHiLo{
                     }
                 }
 
-                if(result.getMaxTemDate().length() > 0){
-                    String[] result_date_with_max_temp = result.getMaxTemDate().split(",");
+                if(result.maxTemDate.length() > 0){
+                    String[] result_date_with_max_temp = result.maxTemDate.split(",");
                     if(result_date_with_max_temp.length > 0)
                     {
                         resultmaxTemperature = Float.parseFloat(result_date_with_max_temp[1]);
@@ -160,18 +133,18 @@ public class MonthHiLo{
                 }
 
 
-                if (resultminTemperature==0 || minTemperature < resultminTemperature)
+                if (resultminTemperature == 0 || minTemperature < resultminTemperature)
                 {
-                    result.setMinTemDate(minlocaldate + "," + minTemperature);
+                    result.minTemDate = minlocaldate + "," + minTemperature;
                 }
 
-                if (resultmaxTemperature==0 || maxTemperature > resultmaxTemperature)
+                if (resultmaxTemperature == 0 || maxTemperature > resultmaxTemperature)
                 {
-                    result.setMaxTemDate(maxlocaldate + "," + maxTemperature);
+                    result.maxTemDate = maxlocaldate + "," + maxTemperature;
                 }
 
-                if(result.getMinTemDate().length() > 0){
-                    String[] final_result_date_with_min_temp = result.getMinTemDate().split(",");
+                if(result.minTemDate.length() > 0){
+                    String[] final_result_date_with_min_temp = result.minTemDate.split(",");
                     if(final_result_date_with_min_temp.length > 0)
                     {
                         finalresultminTemperature = Float.parseFloat(final_result_date_with_min_temp[1]);
@@ -182,8 +155,8 @@ public class MonthHiLo{
                     }
                 }
 
-                if(result.getMaxTemDate().length() > 0){
-                    String[] final_result_date_with_max_temp = result.getMaxTemDate().split(",");
+                if(result.maxTemDate.length() > 0){
+                    String[] final_result_date_with_max_temp = result.maxTemDate.split(",");
                     if(final_result_date_with_max_temp.length > 0)
                     {
                         finalresultmaxTemperature = Float.parseFloat(final_result_date_with_max_temp[1]);
@@ -194,7 +167,7 @@ public class MonthHiLo{
                     }
                 }
                 float difference = finalresultmaxTemperature - finalresultminTemperature;
-                result.setDifference(difference);
+                result.difference = difference;
             }
             context.write(key, result);
         }
