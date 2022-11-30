@@ -4,9 +4,7 @@ import org.apache.hadoop.conf.*;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapreduce.*;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.text.DecimalFormat;
@@ -19,31 +17,6 @@ public class MonthHiLo{
 
 
         DecimalFormat df = new DecimalFormat("0.00");
-
-
-
-//        public String getMinTemDate() {
-//            return minTemDate;
-//        }
-
-//        public void setMinTemDate(String mintempWithDate){
-//            this.minTemDate=mintempWithDate;
-//        }
-
-//        public String getMaxTemDate(){
-//            return maxTemDate;
-//        }
-
-//        public void setMaxTemDate(String maxtempWithDate){
-//            this.maxTemDate=maxtempWithDate;
-//        }
-
-//        public float getDifference() {
-//            return difference;
-//        }
-//        public void setDifference(float difference) {
-//            this.difference = Float.parseFloat(df.format(difference));
-//        }
 
         public void readFields(DataInput in) throws IOException {
             minTemDate=new String(in.readUTF());
@@ -69,8 +42,6 @@ public class MonthHiLo{
                 throws IOException, InterruptedException
         {
             Text statekey = new Text();
-//            String minTemDate;
-//            String maxTemDate;
             MinMaxTemperature outvalue = new MinMaxTemperature();
 
             String line = value.toString();
