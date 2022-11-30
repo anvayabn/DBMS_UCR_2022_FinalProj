@@ -17,41 +17,39 @@ public class MeanTemppMonthpState {
     public static class Map1 extends Mapper<LongWritable, Text, Text, Text> {
 
         public void map(LongWritable key, Text value, Context context)
-                throws IOException, InterruptedException
-        {
+                throws IOException, InterruptedException {
             Text stateAndMonth = new Text();
             Text avgTemp = new Text();
             String line = value.toString();
             line = line.replaceAll("\\s+", ",");
             String[] part = line.split(",");
-
+// Loading each part of the output lines into variables
             String date = part[0];
             String temperature = part[1];
             String readings = part[2];
 
             String state = part[3];
             String station_id = part[4];
-            String year = date.substring(0,4);
-            String month = date.substring(4,6);
+            String year = date.substring(0, 4);
+            String month = date.substring(4, 6);
             int monthInt = Integer.parseInt(month);
-//            String date_with_month = date.substring(0, 6);
-            String date_with_month = year + "_" +Month.of(monthInt);
+//            To display the name of the month
+            String date_with_month = year + "_" + Month.of(monthInt);
             stateAndMonth.set(state + date_with_month);
 
             float temp = Float.parseFloat(temperature);
             float numberOfReadings = Float.parseFloat(readings);
             float product = temp * numberOfReadings;
+//            Setting Precision
             String values = String.format("%.2f,%.2f", product, numberOfReadings);
             avgTemp.set(values);
             context.write(stateAndMonth, avgTemp);
-            System.out.println(String.valueOf(stateAndMonth)+" "+String.valueOf(avgTemp));
         }
     }
 
     public static class Red1 extends Reducer<Text, Text, Text, Text> {
         public void reduce(Text key, Iterable<Text> values, Context context)
-                throws IOException, InterruptedException
-        {
+                throws IOException, InterruptedException {
             float total_temp = 0;
             float total_read = 0;
             for (Text t : values) {
@@ -68,8 +66,7 @@ public class MeanTemppMonthpState {
         }
     }
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
         Job job = new Job(conf, "Calculating_MeanTemp_perMonth_perState");
         job.setJarByClass(MeanTemppMonthpState.class);
