@@ -62,7 +62,7 @@ hadoop fs -put C:\Users\Anvay\Desktop\DBMS\2009.txt /input_dir
 ```
 - Step 3 : Construct the Input File. The input file is used for further MapReduce jobs. Use the InputFileConstruction.jar to do the same. Move the file from output directory to Results Folder
 ```
-hadoop jar C:\Users\Anvay\Desktop\DBMS\InputFileConstruction.jar InputFileConstruction /input_dir/WeatherStationLocations1.csv /input_dir/2006.txt /input_dir/2007.txt /input_dir/2008.txt /input_dir/2009.txt /output_dir
+hadoop jar C:\Users\Anvay\Desktop\DBMS\InputFileConstruction.jar InputFileConstruction /input_dir/WeatherStationLocations.csv /input_dir/2006.txt /input_dir/2007.txt /input_dir/2008.txt /input_dir/2009.txt /output_dir
 
 hadoop fs -mv /output_dir/part-r-00000 /Results/InputFileConstruction.txt
 ```
